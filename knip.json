@@ -1,0 +1,6 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["src/index.ts", "src/cli.ts", "test/**/*.test.ts"],
+  "project": ["src/**/*.ts"],
+  "ignoreDependencies": ["knip", "ts-morph", "prettier"]
+}

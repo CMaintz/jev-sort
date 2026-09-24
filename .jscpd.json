@@ -1,0 +1,13 @@
+{
+  "gitignore": true,
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "**/test/**",
+    "**/*.config.*",
+    "**/*.d.ts",
+    "**/package-lock.json",
+    "**/.jscpd/**"
+  ]
+}
