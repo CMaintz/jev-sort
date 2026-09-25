@@ -1,0 +1,22 @@
+# Example config — jev-sort --config examples/jev-sort.yml < tickets.jsonl
+provider: typesafe # typesafe | cloudflare
+model: jev-1.13.0
+escalate_below: 0.6 # rows below this confidence go to the review stream
+concurrency: 8
+format: jsonl # jsonl | csv (input + stdout)
+
+questions:
+  team:
+    kind: choice
+    instructions: Which team should handle this ticket?
+    options:
+      billing: payment or charge issues
+      tech: bugs, errors, outages
+      sales: pre-purchase questions
+  urgent:
+    kind: noul
+    instructions: Does the message convey urgency or time-pressure?
+  sentiment:
+    kind: score
+    instructions: Overall customer sentiment
+    levels: [negative, neutral, positive]
