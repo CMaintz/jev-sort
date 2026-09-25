@@ -1,6 +1,6 @@
 {
   "name": "jev-sort",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "jq for judgment — stream rows through TypeSafe AI Jev and get typed classification/score columns + confidence, at pennies per 10k.",
   "license": "MIT",
   "author": "Christoffer Maintz",
@@ -25,7 +25,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=20"
   },
@@ -36,8 +38,22 @@
     "test:watch": "vitest",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["jev", "typesafe", "llm", "classification", "bulk", "cli", "data-labeling", "etl", "jq"],
+  "keywords": [
+    "jev",
+    "typesafe",
+    "llm",
+    "classification",
+    "bulk",
+    "cli",
+    "data-labeling",
+    "etl",
+    "jq"
+  ],
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.7.0",
     "@vitest/coverage-v8": "^5.0.1",
     "eslint": "^9.36.0",

@@ -18,10 +18,11 @@ jev-sort earns its place at **scale** — 10k–1M rows, where running an LLM pe
 
 ## CLI
 
-- Questions inline: `-q 'name:choice(a,b,c)'` · `-q 'name:noul'` · `-q 'name:score(low,mid,high)'`
-- `--escalate 'conf<0.6'` splits confident rows (stdout) from uncertain ones (`--review-out FILE`); a row is confident only if **every** choice/score answer clears the bar. Exits non-zero if any rows were flagged (opt out with `--allow-review`) so it's pipeline/CI-safe.
-- `--concurrency N` (default 8) · `--provider typesafe|cloudflare` · `--model jev-1.13.0`
-- Input is JSONL on stdin; each row becomes the Jev `state`. Set `JEV_API_KEY` in the environment.
+- Questions inline: `-q 'name:choice(a,b,c)'` · `-q 'name:noul'` · `-q 'name:score(low,mid,high)'`, **or** a richer `--config jev-sort.yml` (full `instructions` + `criteria` per question — what steers Jev well).
+- `--escalate 'conf<0.6'` splits confident rows (stdout) from uncertain ones (`--review-out FILE`, JSONL); a row is confident only if **every** choice/score answer clears the bar. Exits non-zero if any rows were flagged (opt out with `--allow-review`) so it's pipeline/CI-safe.
+- `--format jsonl|csv` (input + stdout) · `--concurrency N` (default 8) · `--rate PER_MINUTE` (pace under Jev's req/min ceiling) · `--dedupe` (skip identical states) · `--provider typesafe|cloudflare` · `--model jev-1.13.0`
+- `--eval labeled.jsonl` measures agreement per question against a hand-labeled sample (truth columns stripped from the state) — run it **before** a big job. The honest antidote to ~68% accuracy.
+- Input on stdin; each row becomes the Jev `state`. Set `JEV_API_KEY` in the environment.
 
 ## Library
 
@@ -52,6 +53,6 @@ for await (const r of classify(
 
 ## Status
 
-**v0.1 (MVP)** — JSONL/stdin in, inline `choice`/`noul`/`score`, `_confidence` column, `--escalate` split, cost summary; bounded-concurrency streaming (`classify`) and the shared `JevProvider` port. 12 tests, passes the [Foundry](https://github.com/CMaintz/foundry) gate. Roadmap (see the [spec](../SPECS/jev-sort-cli.md)): CSV + YAML config, a rate-limit-aware scheduler, `--resume`, and an `--eval` accuracy harness.
+**v1.0** — JSONL + CSV I/O, inline `-q` **and** YAML config, `_confidence`, `--escalate` split, bounded-concurrency streaming (`classify`), `--dedupe`, a `--rate` limiter, and the `--eval` accuracy harness. 23 tests, passes the [Foundry](https://github.com/CMaintz/foundry) gate. Deferred to v1.x (see the [spec](../SPECS/jev-sort-cli.md)): `--resume` checkpointing, glob/RSS sources, sampling + cost preflight, and a live-key end-to-end run.
 
 MIT © Christoffer Maintz

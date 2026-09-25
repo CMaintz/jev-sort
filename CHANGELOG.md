@@ -4,21 +4,24 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-25
+
+First stable release — "jq for judgment": stream rows through Jev and get typed columns + confidence, at scale.
+
 ### Added
 
-- **v0.1 (MVP):** `jev-sort` CLI — JSONL on stdin → typed columns + a `_confidence` field via one batched Jev call per row.
-- Inline questions: `-q 'name:choice(a,b,c)'` / `-q 'name:noul'` / `-q 'name:score(low,mid,high)'`.
-- `--escalate 'conf<0.6'` splits confident rows (stdout) from uncertain ones (`--review-out`); pipeline-safe non-zero exit when rows are flagged (`--allow-review` opts out).
-- Pure, tested core: `parseQuestions`, `answersToColumns` (row confidence = min of gated choice/score), `parseEscalate`.
-- Bounded-concurrency streaming mapper (`mapPool`) and the `classify()` library API + `choice`/`noul`/`score` helpers.
+- **CLI + library:** JSONL rows on stdin → typed columns + a `_confidence` field, one batched Jev call each.
+- **Questions** inline (`-q 'name:choice/noul/score'`) **or** via a richer **YAML `--config`** (full instructions + criteria).
+- **CSV + JSONL** for input and stdout (`--format`); `--escalate 'conf<0.6'` splits uncertain rows to a review file, pipeline-safe non-zero exit (`--allow-review` opts out).
+- **`--eval labeled.jsonl`** — per-question agreement against a hand-labeled sample (truth stripped from the state); the honest antidote to ~68% accuracy.
+- **`--dedupe`** (skip identical states) and a **`--rate` limiter** (token bucket) for large jobs.
+- Pure tested core (`parseQuestions`, `answersToColumns`, `parseEscalate`, `matches`), a bounded-concurrency streaming mapper (`mapPool`), and the `classify()` library API.
 - Shared `JevProvider` port (TypeSafe + Cloudflare); onboarded onto the Foundry gate.
 
 ### Verified
 
-- `mise run gate` (lint → typecheck → test → audit) green; 12 unit tests, 98.9% line coverage.
+- `mise run gate` (lint → typecheck → test → audit) green; **23 unit tests**, 98% line / 92% branch coverage.
 
-### Roadmap (see the spec)
+### Deferred to v1.x (see the spec)
 
-- CSV input + YAML config; a rate-limit-aware scheduler (token bucket + 429 backoff).
-- `--resume` checkpointing; glob/RSS sources; `--eval` accuracy harness; row dedupe + cost preflight.
-- Exercise end-to-end against a live Jev key.
+- `--resume` checkpointing; glob/RSS sources; sampling + cost preflight; a live-key end-to-end run.

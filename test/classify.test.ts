@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { classify } from '../src/index.js';
+import { classify, RateLimiter } from '../src/index.js';
 import { parseQuestions } from '../src/core/questions.js';
 import type { Answer, ClassifiedRow } from '../src/index.js';
 import type { JevProvider } from '../src/providers/jev-provider.js';
@@ -32,5 +32,32 @@ describe('classify', () => {
     const out: ClassifiedRow[] = [];
     for await (const r of classify([{ id: 1 }], questions, { provider: p })) out.push(r);
     expect(out[0]?.escalated).toBe(false);
+  });
+
+  it('dedupe: identical rows call Jev once; the repeat is served fromCache', async () => {
+    let calls = 0;
+    const p: JevProvider = {
+      evaluate: async () => {
+        calls++;
+        return {
+          model: 't',
+          answers: { team: { type: 'choice', choice: 'a', confidence: 0.9, probabilities: {} } },
+          usage: { input_tokens: 5, output_tokens: 1 },
+        };
+      },
+    };
+    const questions = parseQuestions(['team:choice(a,b)']);
+    const out: ClassifiedRow[] = [];
+    // concurrency 1 so the first row caches before the identical second runs; limiter exercises that path.
+    for await (const r of classify([{ text: 'same' }, { text: 'same' }], questions, {
+      provider: p,
+      concurrency: 1,
+      dedupe: true,
+      limiter: new RateLimiter(0),
+    })) {
+      out.push(r);
+    }
+    expect(calls).toBe(1);
+    expect(out.filter((r) => r.fromCache).length).toBe(1);
   });
 });
