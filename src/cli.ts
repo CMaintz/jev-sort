@@ -71,7 +71,7 @@ async function main(): Promise<void> {
   const questions: Record<string, Question> = cfg.questions ?? parseQuestions(values.q ?? []);
   const provider = makeProvider(
     values.provider ?? cfg.provider ?? 'typesafe',
-    values.model ?? cfg.model ?? 'jev-1.13.0',
+    values.model ?? cfg.model ?? 'jev-latest',
   );
 
   // --eval: measure accuracy against a labeled sample, then stop.

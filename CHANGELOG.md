@@ -4,6 +4,10 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 ## [Unreleased]
 
+### Changed
+
+- Default model is now `jev-latest` (was the pinned `jev-1.13.0`), tracking the recommended model. Use `--model` or `model:` in config to pin a version for reproducibility.
+
 ## [1.0.0] - 2026-09-25
 
 First stable release — "jq for judgment": stream rows through Jev and get typed columns + confidence, at scale.

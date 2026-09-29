@@ -45,7 +45,7 @@ export function parseConfig(raw: string): SortConfig {
 
   return {
     provider: doc.provider ?? 'typesafe',
-    model: doc.model ?? 'jev-1.13.0',
+    model: doc.model ?? 'jev-latest',
     escalate_below: doc.escalate_below ?? 0,
     concurrency: doc.concurrency ?? 8,
     format: doc.format ?? 'jsonl',

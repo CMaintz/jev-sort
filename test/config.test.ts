@@ -17,7 +17,7 @@ questions:
     instructions: is spam?
 `);
     expect(c.provider).toBe('typesafe');
-    expect(c.model).toBe('jev-1.13.0');
+    expect(c.model).toBe('jev-latest');
     expect(c.concurrency).toBe(8);
     expect(c.questions.team).toEqual({
       type: 'choice',
