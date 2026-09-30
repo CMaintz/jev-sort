@@ -7,7 +7,11 @@ export const choice = (options: Record<string, string>, instructions = ''): Ques
   criteria: options,
 });
 export const noul = (instructions: string): Question => ({ type: 'noul', instructions });
-export const score = (levels: string[], instructions = ''): Question => ({ type: 'score', instructions, criteria: levels });
+export const score = (levels: string[], instructions = ''): Question => ({
+  type: 'score',
+  instructions,
+  criteria: levels,
+});
 
 /** Parse one inline spec: `name:choice(a,b,c)` | `name:noul` | `name:score(low,mid,high)`. */
 export function parseQuestion(spec: string): [name: string, question: Question] {
